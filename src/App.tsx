@@ -1,6 +1,8 @@
 import React from "react";
 import Router from "Router";
 import { createGlobalStyle } from "styled-components";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -70,11 +72,16 @@ a {
 }
 `;
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <Router />
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </QueryClientProvider>
     </>
   );
 }

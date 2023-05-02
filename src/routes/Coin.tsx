@@ -39,7 +39,7 @@ const Loader = styled.span`
 `;
 
 const Overview = styled.div`
-  width: 70vw;
+  width: 40vw;
   display: flex;
   justify-content: space-between;
   background-color: rgba(0, 0, 0, 0.5);
@@ -58,7 +58,7 @@ const OverviewItem = styled.div`
   }
 `;
 const Description = styled.p`
-  width: 70vw;
+  width: 40vw;
   margin: 20px 0px;
 `;
 
@@ -67,10 +67,11 @@ const Tabs = styled.div`
   grid-template-columns: repeat(2, 1fr);
   margin: 25px 0px;
   gap: 10px;
+  width: 40vw;
 `;
 
 const Tab = styled.span<{ isActive: boolean }>`
-  width: 20vw;
+  width: 100%;
   text-align: center;
   text-transform: uppercase;
   font-size: 12px;
