@@ -9,6 +9,8 @@ import {
   Link,
   useRouteMatch,
 } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 
@@ -27,6 +29,16 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Button = styled.button`
+  background-color: rgba(0, 0, 0, 0.5);
+  color: ${(props) => props.theme.textColor};
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid palevioletred;
+  border-radius: 3px;
 `;
 
 const Title = styled.h1`
@@ -167,21 +179,40 @@ function Coin() {
   const chartMatch = useRouteMatch("/:coinid/chart");
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinId],
-    () => fetchCoinInfo(coinId)
+    () => fetchCoinInfo(coinId),
+    {
+      refetchInterval: 1000,
+    }
   );
   const { isLoading: tickersLoding, data: tickersData } = useQuery<PriceData>(
     ["ticker", coinId],
-    () => fetchCoinTickers(coinId)
+    () => fetchCoinTickers(coinId),
+    {
+      refetchInterval: 5000,
+    }
   );
+
   const loading = infoLoading || tickersLoding;
+
+  const history = useHistory();
+  const handleGoBack = () => {
+    history.push("/");
+  };
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <Button onClick={handleGoBack}>Go Back</Button>
       </Header>
+
       {loading ? (
         <Loader>Loading...</Loader>
       ) : (
@@ -196,8 +227,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

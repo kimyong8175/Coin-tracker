@@ -5,6 +5,7 @@ import ApexChart from "react-apexcharts";
 import styled from "styled-components";
 
 const Container = styled.div`
+  height: auto;
   width: 40%;
 `;
 
@@ -36,7 +37,7 @@ function Chart({ coinId }: ChartProps) {
           type="line"
           series={[
             {
-              name: "sales",
+              name: "price",
               data: data?.map((price) => price.close) ?? [],
             },
           ]}
@@ -67,6 +68,20 @@ function Chart({ coinId }: ChartProps) {
               },
               labels: {
                 show: false,
+              },
+              type: "datetime",
+              categories: data?.map((price) =>
+                new Date(price.time_close).toUTCString()
+              ),
+            },
+            fill: {
+              type: "gradient",
+              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
+            },
+            colors: ["#0fbcf9"],
+            tooltip: {
+              y: {
+                formatter: (value) => `$ ${value.toFixed(3)}`,
               },
             },
           }}
