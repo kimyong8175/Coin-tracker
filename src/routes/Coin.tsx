@@ -2,14 +2,14 @@
 import React from "react";
 import { useQuery } from "react-query";
 import {
-  Switch,
+  Routes,
   Route,
   useLocation,
   useParams,
   Link,
-  useRouteMatch,
+  useMatch,
 } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
@@ -173,10 +173,12 @@ interface PriceData {
 }
 
 function Coin() {
-  const { coinId } = useParams<RouteParams>();
-  const { state } = useLocation<RouteState>();
-  const priceMatch = useRouteMatch("/:coinid/price");
-  const chartMatch = useRouteMatch("/:coinid/chart");
+  const { coinId } = useParams() as { coinId: string };
+  const location = useLocation();
+  const { name } = location.state;
+  // const { state } = useLocation<{name: string}>();
+  const priceMatch = useMatch("/:coinid/price");
+  const chartMatch = useMatch("/:coinid/chart");
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinId],
     () => fetchCoinInfo(coinId),
@@ -194,22 +196,18 @@ function Coin() {
 
   const loading = infoLoading || tickersLoding;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleGoBack = () => {
-    history.push("/");
+    navigate("/");
   };
 
   return (
     <Container>
       <Helmet>
-        <title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </title>
+        <title>{name ? name : loading ? "Loading..." : infoData?.name}</title>
       </Helmet>
       <Header>
-        <Title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </Title>
+        <Title>{name ? name : loading ? "Loading..." : infoData?.name}</Title>
         <Button onClick={handleGoBack}>Go Back</Button>
       </Header>
 
@@ -252,14 +250,13 @@ function Coin() {
             </Tab>
           </Tabs>
 
-          <Switch>
-            <Route path={`/:coinId/price`}>
-              <Price />
-            </Route>
-            <Route path={`/:coinId/chart`}>
-              <Chart coinId={coinId} />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path={`/:coinId/price`} element={<Price />} />
+            <Route
+              path={`/:coinId/chart`}
+              element={<Chart coinId={coinId} />}
+            />
+          </Routes>
         </>
       )}
     </Container>
