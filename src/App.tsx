@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Router from "Router";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { GlobalStyle } from "styles/globalStyles";
 
 function App() {
@@ -12,8 +12,8 @@ function App() {
     <>
       <GlobalStyle />
       <Router />
-      <ReactQueryDevtools initialIsOpen={false} />
       <button onClick={themeToggler}>Switch Theme</button>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </>
   );
 }

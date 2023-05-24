@@ -5,11 +5,11 @@ import { ThemeProvider } from "styled-components";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { theme } from "./theme";
 
-const client = new QueryClient();
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
-  <QueryClientProvider client={client}>
+  <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>

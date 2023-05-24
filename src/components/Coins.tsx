@@ -69,6 +69,8 @@ interface ICoin {
   type: string;
 }
 
+
+
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
 
@@ -87,7 +89,7 @@ function Coins() {
           {/* state: { name: coin.name }, */}
           {data?.slice(0, 50).map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={{ name: coin.name }}>
+              <Link to={`${coin.id}`} state={{ name: coin.name }}>
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLocaleLowerCase()}`}
                   alt={coin.name}

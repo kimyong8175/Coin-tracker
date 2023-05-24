@@ -11,108 +11,22 @@ import {
 } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import {
+  Container,
+  Header,
+  Loader,
+  Overview,
+  Button,
+  Title,
+  OverviewItem,
+  Description,
+  Tab,
+  Tabs,
+} from "../styles/coinStyles";
 
 import Chart from "./Chart";
-import Price from "./Price";
-
-const Container = styled.div`
-  padding: 0px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-const Header = styled.header`
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Button = styled.button`
-  background-color: rgba(0, 0, 0, 0.5);
-  color: ${(props) => props.theme.textColor};
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid palevioletred;
-  border-radius: 3px;
-`;
-
-const Title = styled.h1`
-  font-size: 48px;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const Loader = styled.span`
-  text-align: center;
-  display: block;
-`;
-
-const Overview = styled.div`
-  width: 40vw;
-  display: flex;
-  justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px 20px;
-  border-radius: 10px;
-`;
-const OverviewItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  span:first-child {
-    font-size: 10px;
-    font-weight: 400;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  }
-`;
-const Description = styled.p`
-  width: 40vw;
-  margin: 20px 0px;
-`;
-
-const Tabs = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  margin: 25px 0px;
-  gap: 10px;
-  width: 40vw;
-`;
-
-const Tab = styled.span<{ isActive: boolean }>`
-  width: 100%;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 7px 0px;
-  border-radius: 10px;
-  color: ${(props) =>
-    props.isActive ? props.theme.accentColor : props.theme.textColor};
-  a {
-    display: block;
-  }
-`;
-
-interface RouteParams {
-  coinId: string;
-}
-
-interface RouteState {
-  name: string;
-}
-
-// interface Itag {
-//   id: string;
-//   name: string;
-//   coin_counter: number;
-//   ico_counter: number;
-// }
+// import Price from "./Price";
 
 interface InfoData {
   id: string;
@@ -172,13 +86,18 @@ interface PriceData {
   };
 }
 
+interface RouterState {
+  name: string;
+}
+
 function Coin() {
   const { coinId } = useParams() as { coinId: string };
   const location = useLocation();
-  const { name } = location.state;
-  // const { state } = useLocation<{name: string}>();
-  const priceMatch = useMatch("/:coinid/price");
-  const chartMatch = useMatch("/:coinid/chart");
+  const name = location.state as RouterState;
+
+  // const location = useLocation<{name: string}>();
+  // const priceMatch = useMatch(`:${coinId}/price`);
+  const chartMatch = useMatch(`:${coinId}/chart`);
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinId],
     () => fetchCoinInfo(coinId),
@@ -245,15 +164,15 @@ function Coin() {
             <Tab isActive={chartMatch !== null}>
               <Link to={`/${coinId}/chart`}>Chart</Link>
             </Tab>
-            <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
-            </Tab>
+            {/* <Tab isActive={priceMatch !== null}>
+              <Link to={`/price`}>Price</Link>
+            </Tab> */}
           </Tabs>
 
           <Routes>
-            <Route path={`/:coinId/price`} element={<Price />} />
+            {/* <Route path={`/price`} element={<Price />} /> */}
             <Route
-              path={`/:coinId/chart`}
+              path={`/${coinId}/chart`}
               element={<Chart coinId={coinId} />}
             />
           </Routes>
