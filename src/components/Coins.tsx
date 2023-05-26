@@ -1,63 +1,16 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
 import { fetchCoins } from "api";
-
-const Container = styled.div`
-  padding: 0px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-const Header = styled.header`
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const CoinsList = styled.ul``;
-const Coin = styled.li`
-  background-color: white;
-  color: ${(props) => props.theme.textColor};
-  padding: 20px;
-  border-radius: 20px;
-  margin-bottom: 15px;
-  width: 50vw;
-  display: flex;
-  align-items: center;
-
-  a {
-    display: flex;
-    align-items: center;
-  }
-
-  &:hover {
-    a {
-      display: flex;
-      align-items: center;
-      color: ${(props) => props.theme.accentColor};
-    }
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 48px;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const Loader = styled.span`
-  text-align: center;
-  display: block;
-`;
-
-const Img = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-`;
+import {
+  Container,
+  CoinsList,
+  Coin,
+  Img,
+  Loader,
+  Title,
+  Header,
+} from "../styles/coinsStyles";
 
 interface ICoin {
   id: string;
@@ -68,8 +21,6 @@ interface ICoin {
   is_active: boolean;
   type: string;
 }
-
-
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);

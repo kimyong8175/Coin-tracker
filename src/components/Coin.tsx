@@ -1,13 +1,10 @@
-// import React, { useState } from "react";
-import React from "react";
 import { useQuery } from "react-query";
 import {
-  Routes,
-  Route,
   useLocation,
   useParams,
   Link,
-  useMatch,
+  Outlet,
+  useOutletContext,
 } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -18,15 +15,12 @@ import {
   Loader,
   Overview,
   Button,
-  Title,
+  // Title,
   OverviewItem,
   Description,
   Tab,
   Tabs,
 } from "../styles/coinStyles";
-
-import Chart from "./Chart";
-// import Price from "./Price";
 
 interface InfoData {
   id: string;
@@ -94,10 +88,8 @@ function Coin() {
   const { coinId } = useParams() as { coinId: string };
   const location = useLocation();
   const name = location.state as RouterState;
+  console.log(name);
 
-  // const location = useLocation<{name: string}>();
-  // const priceMatch = useMatch(`:${coinId}/price`);
-  const chartMatch = useMatch(`:${coinId}/chart`);
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinId],
     () => fetchCoinInfo(coinId),
@@ -123,10 +115,10 @@ function Coin() {
   return (
     <Container>
       <Helmet>
-        <title>{name ? name : loading ? "Loading..." : infoData?.name}</title>
+        {/* <title>{name ? name : loading ? "Loading..." : infoData?.name}</title> */}
       </Helmet>
       <Header>
-        <Title>{name ? name : loading ? "Loading..." : infoData?.name}</Title>
+        {/* <Title>{name ? name : loading ? "Loading..." : infoData?.name}</Title> */}
         <Button onClick={handleGoBack}>Go Back</Button>
       </Header>
 
@@ -161,25 +153,19 @@ function Coin() {
           </Overview>
 
           <Tabs>
-            <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
+            <Tab isActive={true}>
+              <Link to="chart">Chart</Link>
             </Tab>
-            {/* <Tab isActive={priceMatch !== null}>
-              <Link to={`/price`}>Price</Link>
-            </Tab> */}
           </Tabs>
-
-          <Routes>
-            {/* <Route path={`/price`} element={<Price />} /> */}
-            <Route
-              path={`/${coinId}/chart`}
-              element={<Chart coinId={coinId} />}
-            />
-          </Routes>
+          <Outlet context={{ coinId }} />
         </>
       )}
     </Container>
   );
+}
+
+export function useCoinId() {
+  return useOutletContext<{ coinId: string }>();
 }
 
 export default Coin;
