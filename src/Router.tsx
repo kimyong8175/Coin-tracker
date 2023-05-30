@@ -3,6 +3,7 @@ import Coin from "components/Coin";
 import Coins from "components/Coins";
 import Root from "./Root";
 import Chart from "components/Chart";
+import Price from "components/Price";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
           {
             path: "chart",
             element: <Chart />,
+          },
+          {
+            path: "price",
+            element: <Price />,
           },
         ],
       },

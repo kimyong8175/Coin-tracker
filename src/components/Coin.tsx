@@ -5,9 +5,9 @@ import {
   Link,
   Outlet,
   useOutletContext,
+  useMatch,
 } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import {
   Container,
@@ -15,7 +15,7 @@ import {
   Loader,
   Overview,
   Button,
-  // Title,
+  Title,
   OverviewItem,
   Description,
   Tab,
@@ -80,23 +80,28 @@ interface PriceData {
   };
 }
 
-interface RouterState {
-  name: string;
-}
+// type RouterState = {
+//   name: string;
+// };
 
 function Coin() {
   const { coinId } = useParams() as { coinId: string };
   const location = useLocation();
-  const name = location.state as RouterState;
-  console.log(name);
+  // const coinName = location.state as RouterState;
+  // console.log(coinName);
+  const { state } = location;
+
+  const chartMatch = useMatch("/:coinId/chart");
+  const priceMatch = useMatch("/:coinId/price");
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinId],
     () => fetchCoinInfo(coinId),
     {
-      refetchInterval: 1000,
+      refetchInterval: 10000,
     }
   );
+
   const { isLoading: tickersLoding, data: tickersData } = useQuery<PriceData>(
     ["ticker", coinId],
     () => fetchCoinTickers(coinId),
@@ -114,11 +119,10 @@ function Coin() {
 
   return (
     <Container>
-      <Helmet>
-        {/* <title>{name ? name : loading ? "Loading..." : infoData?.name}</title> */}
-      </Helmet>
       <Header>
-        {/* <Title>{name ? name : loading ? "Loading..." : infoData?.name}</Title> */}
+        <Title>
+          {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
+        </Title>
         <Button onClick={handleGoBack}>Go Back</Button>
       </Header>
 
@@ -153,8 +157,11 @@ function Coin() {
           </Overview>
 
           <Tabs>
-            <Tab isActive={true}>
+            <Tab isActive={chartMatch !== null}>
               <Link to="chart">Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to="price">Price</Link>
             </Tab>
           </Tabs>
           <Outlet context={{ coinId }} />
