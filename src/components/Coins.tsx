@@ -1,4 +1,4 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
 import { fetchCoins } from "api";
@@ -22,13 +22,8 @@ interface ICoin {
   type: string;
 }
 
-interface IToggleProps {
-  themeToggler: () => void;
-}
-
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
-  const { themeToggler }: IToggleProps = useOutletContext();
 
   return (
     <Container>
@@ -37,7 +32,6 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>Coin</Title>
-        <button onClick={themeToggler}>Toggle Dark Mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>

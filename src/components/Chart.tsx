@@ -2,6 +2,8 @@ import { useQuery } from "react-query";
 import { fetchCoinHistory } from "api";
 import ApexChart from "react-apexcharts";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "atoms";
 
 import { useCoinId } from "./Coin";
 
@@ -26,6 +28,7 @@ function Chart() {
   const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
     fetchCoinHistory(coinId)
   );
+  const isDark = useRecoilValue(isDarkAtom);
 
   return (
     <Container>
@@ -43,7 +46,7 @@ function Chart() {
             ]}
             options={{
               theme: {
-                mode: "dark",
+                mode: isDark ? "dark" : "light",
               },
               chart: {
                 width: 500,
@@ -82,35 +85,6 @@ function Chart() {
               tooltip: {
                 y: {
                   formatter: (value) => `$ ${value.toFixed(3)}`,
-                },
-              },
-            }}
-          />
-          <ApexChart
-            type="candlestick"
-            series={[
-              {
-                data:
-                  data?.map((price) => {
-                    return {
-                      x: new Date(price.time_close).toUTCString(),
-                      y: [price.open, price.high, price.low, price.close],
-                    };
-                  }) ?? [],
-              },
-            ]}
-            options={{
-              chart: {
-                type: "candlestick",
-                height: 350,
-              },
-              xaxis: {
-                type: "datetime",
-              },
-              yaxis: {
-                show: false,
-                tooltip: {
-                  enabled: true,
                 },
               },
             }}

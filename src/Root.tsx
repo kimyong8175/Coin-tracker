@@ -1,19 +1,18 @@
-import { useState } from "react";
 import { GlobalStyle } from "styles/globalStyles";
 import { Outlet } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "atoms";
+import Navbar from "components/Navbar/Navbar";
 
 function Root() {
-  const [isDark, setIsDark] = useState(true);
-  const themeToggler = () => {
-    setIsDark((current) => !current);
-  };
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      {/* <button onClick={themeToggler}>Switch Theme</button> */}
       <GlobalStyle />
-      <Outlet context={{ themeToggler, isDark }} />
+      <Navbar />
+      <Outlet />
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </ThemeProvider>
   );
