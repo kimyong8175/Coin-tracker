@@ -2,16 +2,15 @@ import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { isDarkAtom } from "atoms";
 import { AiFillDollarCircle } from "react-icons/ai";
+import { MdDarkMode } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Nav = styled.nav`
   font-size: 18px;
   position: sticky;
   top: 0;
-  /* z-index: 999; */
   height: 70px;
   background-color: transparent;
-  /* box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.5); */
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
   display: flex;
   justify-content: center;
@@ -19,14 +18,23 @@ const Nav = styled.nav`
   margin-bottom: 10px;
 `;
 
-const MenuContainer = styled.ul`
-  width: 80%;
+const NavContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 75%;
+`;
+
+const IconContainer = styled(Link)`
+  width: 60%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
 `;
 
 const Menu = styled.ul`
-  width: 100%;
+  width: 40%;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   text-align: center;
 `;
@@ -36,12 +44,15 @@ export default function Navbar() {
   const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   return (
     <Nav>
-      <MenuContainer>
-        <Menu>
+      <NavContainer>
+        <IconContainer to="/">
           <AiFillDollarCircle />
-          Coin Tracker
+          <p>Coin Tracker</p>
+        </IconContainer>
+        <Menu>
+          <MdDarkMode style={{ cursor: "pointer" }} onClick={toggleDarkAtom} />
         </Menu>
-      </MenuContainer>
+      </NavContainer>
     </Nav>
   );
 }

@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   useLocation,
   useParams,
@@ -31,8 +31,6 @@ interface InfoData {
   is_active: boolean;
   type: string;
   logo: string;
-  // tags: Itag[];
-  // team: object;
   description: string;
   message: string;
   open_source: boolean;
@@ -83,8 +81,6 @@ interface PriceData {
 function Coin() {
   const { coinId } = useParams() as { coinId: string };
   const location = useLocation();
-  // const coinName = location.state as RouterState;
-  // console.log(coinName);
   const { state } = location;
 
   const chartMatch = useMatch("/:coinId/chart");

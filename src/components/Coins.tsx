@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet";
 import { fetchCoins } from "api";
 import {
@@ -23,7 +23,7 @@ interface ICoin {
 }
 
 function Coins() {
-  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
+  const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
 
   return (
     <Container>
